@@ -5,12 +5,12 @@
  * @format
  * @flow strict-local
  */
-// In App.js in a new project
-
 import * as React from 'react';
 import {Button, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+
+import SampleScreen from './container/Sample';
 
 function HomeScreen({navigation}) {
   return (
@@ -19,6 +19,14 @@ function HomeScreen({navigation}) {
       <Button
         title="Go to Details"
         onPress={() => navigation.navigate('Details')}
+      />
+      <Button
+        title="Go to Sample"
+        onPress={() => navigation.navigate('Sample')}
+      />
+      <Button
+        onPress={() => navigation.navigate('MyModal')}
+        title="Open Modal"
       />
     </View>
   );
@@ -32,19 +40,35 @@ function DetailsScreen() {
   );
 }
 
-const Stack = createStackNavigator();
+function ModalScreen({navigation}) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{fontSize: 30}}>This is a modal!</Text>
+      <Button onPress={() => navigation.goBack()} title="Dismiss" />
+    </View>
+  );
+}
+
+const MainStack = createStackNavigator();
+const RootStack = createStackNavigator();
+
+function MainStackScreen() {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen name="Home" component={HomeScreen} />
+      <MainStack.Screen name="Details" component={DetailsScreen} />
+      <MainStack.Screen name="Sample" component={SampleScreen} />
+    </MainStack.Navigator>
+  );
+}
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{title: 'Overview'}}
-        />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
+      <RootStack.Navigator mode="modal" headerMode="none">
+        <RootStack.Screen name="Main" component={MainStackScreen} />
+        <RootStack.Screen name="MyModal" component={ModalScreen} />
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
