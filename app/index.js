@@ -9,6 +9,7 @@ import * as React from 'react';
 import {Button, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import SampleScreen from './container/Sample';
 
@@ -28,6 +29,7 @@ function HomeScreen({navigation}) {
         onPress={() => navigation.navigate('MyModal')}
         title="Open Modal"
       />
+      <Button onPress={() => navigation.toggleDrawer()} title="Open Menu" />
     </View>
   );
 }
@@ -49,16 +51,45 @@ function ModalScreen({navigation}) {
   );
 }
 
+function CustomDrawerContent({navigation}) {
+  return (
+    <View style={{paddingTop: 200}}>
+      <Button
+        title="Go somewhere"
+        onPress={() => {
+          // Navigate using the `navigation` prop that you received
+          navigation.navigate('Sample');
+        }}
+      />
+    </View>
+  );
+}
+
 const MainStack = createStackNavigator();
 const RootStack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-function MainStackScreen() {
+function Main() {
   return (
     <MainStack.Navigator>
-      <MainStack.Screen name="Home" component={HomeScreen} />
+      <MainStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
       <MainStack.Screen name="Details" component={DetailsScreen} />
       <MainStack.Screen name="Sample" component={SampleScreen} />
     </MainStack.Navigator>
+  );
+}
+
+function MainStackScreen() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerContent={(props) => <CustomDrawerContent {...props} />}>
+      <Drawer.Screen name="Main" component={Main} />
+    </Drawer.Navigator>
   );
 }
 
