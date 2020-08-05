@@ -8,7 +8,7 @@
 import * as React from 'react';
 import {Button, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import SampleScreen from './container/Sample';
@@ -23,7 +23,12 @@ function HomeScreen({navigation}) {
       />
       <Button
         title="Go to Sample"
-        onPress={() => navigation.navigate('Sample')}
+        onPress={() =>
+          navigation.navigate('Sample', {
+            itemId: 86,
+            otherParam: 'anything you want here',
+          })
+        }
       />
       <Button
         onPress={() => navigation.navigate('MyModal')}
@@ -75,9 +80,17 @@ function Main() {
       <MainStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+        }}
       />
-      <MainStack.Screen name="Details" component={DetailsScreen} />
+      <MainStack.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={{
+          ...TransitionPresets.ModalSlideFromBottomIOS,
+        }}
+      />
       <MainStack.Screen name="Sample" component={SampleScreen} />
     </MainStack.Navigator>
   );
@@ -88,7 +101,7 @@ function MainStackScreen() {
     <Drawer.Navigator
       initialRouteName="Home"
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Main" component={Main} />
+      <Drawer.Screen name="Main" component={Main} options={{}} />
     </Drawer.Navigator>
   );
 }

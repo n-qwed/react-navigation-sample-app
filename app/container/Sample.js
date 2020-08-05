@@ -19,11 +19,12 @@ class SampleScreen extends React.Component {
   }
 
   render() {
+    const {otherParam} = this.props.route.params;
     return (
       <Container>
         <Content bounces={false} style={styles.container}>
           <TouchableOpacity onPress={this._onPress.bind(this)}>
-            <Text>click</Text>
+            <Text>{otherParam}</Text>
           </TouchableOpacity>
         </Content>
       </Container>
